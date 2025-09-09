@@ -18,7 +18,7 @@
 Jawab: 
 
 Klien > server > django > views > template dan model
-|----------------request—-------------| template melalui input, model melalui write data
+klien - views melalui request, template melalui input, model melalui write data
 
 Template dan model > views > django > serve > klien
 Template melalui display, model melalui data ,
