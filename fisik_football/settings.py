@@ -124,7 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://pbp.cs.ui.ac.id/prama.ardend/fisikfootball"
+    "https://prama-ardend-fisikfootball.pbp.cs.ui.ac.id"
 ]
 
 # Internationalization
