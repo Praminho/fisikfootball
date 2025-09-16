@@ -10,7 +10,7 @@ class Product(models.Model):
         ('tops', 'Tops'),
         ('bottoms', 'Bottoms'),
         ('legwears', 'Legwears'),
-        ('accesories', 'Accesories'),
+        ('accessories', 'Accessories'),
     ]
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
