@@ -65,5 +65,7 @@ Fungsi utama csrf adalah melindungi aplikasi dari serangan situs tertentu yang m
 Mempersiapkan dirketori baru untuk membuat file html baru berupa create_product dan product_detail. Selanjutnya menambahkan fungsi berupa create_product dan show_product. Fungsi lainnya berkaitan dengan XML dan juga JSON. selanjutnya melakukan routing melalui url dan mengaitkan fungsi tersebut agar bisa digunakan di main. Membuat tombol add untuk menambahkan produk yang ingin dijual. Lalu membuat direktori form.py untuk berbagai kategori yang ingin di show seperti harga. Dari model tersebut dibuat bagian “more” agar detail produk dapat lebih terlihat.
 
 6. Apakah ada feedback untuk asisten dosen tutorial 2 yang telah kamu kerjakan sebelumnya?
-Jawab: Sejauh ini asdos sudah sangat dapat membantu saya dalam menyelesaikan masalah yang coba saya tanyakan. Asdos juga sudah 
+Jawab: Sejauh ini asdos sudah sangat dapat membantu saya dalam menyelesaikan masalah yang coba saya tanyakan. Asdos juga sudah bisa menjawab pertanyaan yang saya tanyakan
+
+link foto postman: https://docs.google.com/document/d/1_5-CjRzpEVRuGpWug-JO8lpAHbHNIloiEexLFajqEs8/edit?usp=sharing
 
