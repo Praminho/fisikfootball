@@ -53,11 +53,11 @@ def show_xml_by_id(request, Product_id):
     try: 
         product_item = Product.objects.filter(pk=Product_id)
         xml_data = serializers.serialize("xml", product_item)
-        return HttpResponse(xml_data, content_type="application/xml")
+        return HttpResponse(xml_data, content_type="applicationxml")
     except Product.DoesNotExist:
        return HttpResponse(status=404)
 
-def show_json_by_id(request, product_id):
+def show_json_by_id(request, Product_id):
     try: 
         product_item = Product.objects.filter(pk=Product_id)
         json_data = serializers.serialize("json", [product_item])
