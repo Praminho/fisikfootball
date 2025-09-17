@@ -51,7 +51,7 @@ def show_json(request):
 
 def show_xml_by_id(request, Product_id):
     try: 
-        product_item = Product.objects.filter(pk=product_id)
+        product_item = Product.objects.filter(pk=Product_id)
         xml_data = serializers.serialize("xml", product_item)
         return HttpResponse(xml_data, content_type="application/xml")
     except Product.DoesNotExist:
