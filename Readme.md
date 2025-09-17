@@ -1,3 +1,4 @@
+Tugas 2:
 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 	Jawab: 
     a) Membuat proyek django baru 
@@ -36,3 +37,33 @@ Jawab: Menurut saya, django lebih mudah dipahami karena menggunakan basic utama 
 
 6. Apakah ada feedback untuk asisten dosen tutorial 1 yang telah kamu kerjakan sebelumnya?
 Jawab: Sejauh ini asdos sudah sangat dapat membantu saya dalam menyelesaikan masalah yang coba saya tanyakan.
+
+Tugas 3:
+
+1. Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
+
+Data delivery dibutuhkan untuk membuat flow pengiriman informasi antar komponen aplikasi dapat berjalan dengan baik. Hal ini mencakup pengiriman yang konsisten dan aman untuk mencegah kesalahan pengiriman data. Tanpa data delivery, hasil komunikasi antar aplikasi bisa menjadi sulit diatur ataupun rentan rusak.
+
+2. Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+
+JSON memiliki sintaks yang jauh lebih sederhana dan juga lebih fleksibel dalam menggunakan bahasa pemrograman javascript ketimbang XML. Tak hanya itu, JSON menggunakan ukuran file yang lebih kecil sehingga mempermudah transmisi data. Kekurangan JSON sendiri adalah keamanannya yang lebih rentan untuk diserang seperti virus. JSON juga hanya memiliki dokumentasi skema yang terbatas sehingga kurang fleksibel .
+
+XML mendukung lebih banyak tipe data ketimbang JSON, contohnya seperti tanggal yang mungkin diperlukan untuk jenis web tertentu. Struktur data yang dibuat dapat lebih mudah dibaca ketimbang JSON dan juga menggunakan bahasa pemrograman yang dapat diimplementasikan ke bahasa pemrograman lainnya. Berbeda dengan JSON, XML menggunakan sintaks yang lebih rumit dan ukuran data yang lebih besar.
+
+Menurut saya JSON lebih populer dikarenakan kemudahannya dalam penggunaan secara cepat. Dikarenakan semakin besar pengkodean maka efisiensi akan menjadi sangat penting.
+
+3. Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
+
+Seperti namanya, fungsi method ini melakukan validasi yang dikirimkan pengguna. Jika data yang dikirimkan valid maka akan disimpan dan jika tidak valid maka akan langsung dihapus
+
+4. Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+
+Fungsi utama csrf adalah melindungi aplikasi dari serangan situs tertentu yang menyamar contohnya pada website download online. Beberapa hal yang dapat terjadi ketika tidak menambahkan CSRF token adalah kemudahan jebolnya data karena siapapun dapat melakukan request ke POST tanpa melalui form asli. Hal tersebut dimanfaatkan oleh penyerang melalui pembuatan halaman palsu yang diakses oleh pengguna, kemudian dapat mengubah password email korban, menghapus akun, transaksi keuangan, dan lain sebagainya.
+
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+
+Mempersiapkan dirketori baru untuk membuat file html baru berupa create_product dan product_detail. Selanjutnya menambahkan fungsi berupa create_product dan show_product. Fungsi lainnya berkaitan dengan XML dan juga JSON. selanjutnya melakukan routing melalui url dan mengaitkan fungsi tersebut agar bisa digunakan di main. Membuat tombol add untuk menambahkan produk yang ingin dijual. Lalu membuat direktori form.py untuk berbagai kategori yang ingin di show seperti harga. Dari model tersebut dibuat bagian “more” agar detail produk dapat lebih terlihat.
+
+6. Apakah ada feedback untuk asisten dosen tutorial 2 yang telah kamu kerjakan sebelumnya?
+Jawab: Sejauh ini asdos sudah sangat dapat membantu saya dalam menyelesaikan masalah yang coba saya tanyakan. Asdos juga sudah 
+
