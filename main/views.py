@@ -18,8 +18,8 @@ from django.urls import reverse
 # Create your views here.
 @login_required(login_url='/login')
 def show_main(request): 
-    filter_type = request.GET.get("filter", "all")  # default 'all'
-
+    filter_type = request.GET.get("filter", "all", )  # default 'all'
+    product_under50k = Product.objects.filter(price__lt=50000) 
     if filter_type == "all":
         product_list = Product.objects.all()
     else:
@@ -31,7 +31,9 @@ def show_main(request):
         'class' : 'PBP F',
         'product_list': product_list,
         'last_login': request.COOKIES.get('last_login', 'Never'),
+        'product_under50k' : product_under50k
     }
+
 
     return render(request, "main.html", context)
 
@@ -118,3 +120,21 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def edit_product(request, id):
+    product = get_object_or_404(Product, pk=id)
+    form = ProductForm(request.POST or None, instance=product)
+    if form.is_valid() and request.method == 'POST':
+        form.save()
+        return redirect('main:show_main')
+
+    context = {
+        'form': form
+    }
+
+    return render(request, "edit_product.html", context)
+
+def delete_product(request, id):
+    product = get_object_or_404(News, pk=id)
+    product.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))

@@ -1,0 +1,24 @@
+.form-style form input, form textarea, form select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px solid #4b5563; /* abu-abu gelap */
+    border-radius: 0.375rem;
+    background-color: #2d2d2d; /* abu-abu tua */
+    color: #e5e7eb; /* teks abu-abu terang */
+}
+
+body {
+    background-color: #1e293b; /* biru keabu-abuan gelap */
+    color: #e5e7eb; /* teks default */
+}
+
+.form-style form input:focus, form textarea:focus, form select:focus {
+    outline: none;
+    border-color: #3b82f6; /* biru terang sebagai highlight */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+.form-style input[type="checkbox"]:checked {
+    background-color: #3b82f6; /* biru terang */
+    border-color: #3b82f6;
+}
