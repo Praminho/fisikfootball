@@ -76,17 +76,15 @@ def show_json(request):
         {
             'id': str(product.id),
             'name': product.name,
-            'content': product.content,
+            'description': product.description,
             'category': product.category,
             'thumbnail': product.thumbnail,
-            'product_views': product.product_views,
-            'created_at': product.created_at.isoformat() if product.created_at else None,
+            'price': product.price,
             'is_featured': product.is_featured,
             'user_id': product.user_id,
         }
         for product in product_list
     ]
-
     return JsonResponse(data, safe=False)
 
 def show_xml_by_id(request, Product_id):
@@ -170,23 +168,22 @@ def delete_product(request, id):
 @csrf_exempt
 @require_POST
 def add_product_entry_ajax(request):
-    Name = strip_tags(request.POST.get("name")) # strip HTML tags!
-    Description = strip_tags(request.POST.get("descripton")) # strip HTML tags!
-    title = request.POST.get("title")
-    content = request.POST.get("content")
+    name = strip_tags(request.POST.get("name"))
+    description = strip_tags(request.POST.get("description"))
+    price = request.POST.get("price")
     category = request.POST.get("category")
     thumbnail = request.POST.get("thumbnail")
-    is_featured = request.POST.get("is_featured") == 'on'  # checkbox handling
+    is_featured = request.POST.get("is_featured") == 'on'
     user = request.user
 
-    new_prodct = Product(
-        title=title, 
-        content=content,
+    new_product = Product(
+        name=name,
         description=description,
+        price=price,
+        category=category,
         thumbnail=thumbnail,
         is_featured=is_featured,
-        user=user
+        user=user,
     )
-    new_produt.save()
-
+    new_product.save()
     return HttpResponse(b"CREATED", status=201)

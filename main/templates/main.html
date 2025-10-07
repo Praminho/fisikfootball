@@ -7,55 +7,57 @@
 
 {% block content %}
 {% include 'navbar.html' %}
-<div class="bg-gray-50 w-full pt-16 min-h-screen">
+<div class="bg-gray-900 w-full pt-16 min-h-screen text-gray-100">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header Section -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">Latest Football Product</h1>
-      <p class="text-gray-600">Stay updated with the latest gears and accesories</p>
+      <h1 class="text-3xl font-bold text-gray-100 mb-2">Latest Football Product</h1>
+      <p class="text-gray-400">Stay updated with the latest gears and accessories</p>
     </div>
-  <!-- Button to open modal -->
-    <button onclick="showModal()" class="inline-flex items-center px-4 py-2 bg-white text-green-600 font-semibold outline outline-2 outline-green-600 outline-offset-[-2px] rounded-md hover:bg-green-600 hover:text-white transition-colors mb-4">
+
+    <!-- Button to open modal -->
+    <button onclick="showModal()" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors mb-4">
       Create Product by AJAX
     </button>
+
     <!-- Filter Section -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 bg-white rounded-lg border border-gray-200 p-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 bg-gray-800 rounded-lg border border-gray-700 p-4">
       <div class="flex space-x-3 mb-4 sm:mb-0">
-        <a id="filter-all" class="{% if request.GET.filter == 'all' or not request.GET.filter  %} bg-gray-500 text-white{% else %}bg-white text-gray-700 border border-gray-300{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-gray-500 hover:text-white">
+        <a id="filter-all" class="{% if request.GET.filter == 'all' or not request.GET.filter %} bg-blue-600 text-white{% else %}bg-gray-700 text-gray-300 border border-gray-600{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-blue-600 hover:text-white">
           All Product
         </a>
-        <a id="filter-my" class="{% if request.GET.filter == 'my' %} bg-gray-500 text-white{% else %}bg-white text-gray-700 border border-gray-300{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-gray-500 hover:text-white">
+        <a id="filter-my" class="{% if request.GET.filter == 'my' %} bg-blue-600 text-white{% else %}bg-gray-700 text-gray-300 border border-gray-600{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-blue-600 hover:text-white">
           My Product
         </a>
       </div>
       {% if user.is_authenticated %}
-        <div class="text-sm text-gray-500">Last login: {{ last_login }}</div>
+        <div class="text-sm text-gray-400">Last login: {{ last_login }}</div>
       {% endif %}
     </div>
 
     <!-- Loading State -->
-    <div id="loading" class="bg-white rounded-lg border border-gray-200 p-12 text-center hidden">
-      <svg class="animate-spin h-8 w-8 text-green-600 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <div id="loading" class="bg-gray-800 rounded-lg border border-gray-700 p-12 text-center hidden">
+      <svg class="animate-spin h-8 w-8 text-blue-500 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
       </svg>
-      <p class="text-gray-600 mt-3">Loading product...</p>
+      <p class="text-gray-400 mt-3">Loading product...</p>
     </div>
 
     <!-- Error State -->
-    <div id="error" class="hidden"></div>
+    <div id="error" class="hidden text-red-400 text-center font-medium"></div>
 
     <!-- Product Grid -->
     <div id="grid" class="hidden"></div>
 
     <!-- Empty State -->
-    <div id="empty" class="bg-white rounded-lg border border-gray-200 p-12 text-center hidden">
+    <div id="empty" class="bg-gray-800 rounded-lg border border-gray-700 p-12 text-center hidden">
       <div class="w-32 h-32 mx-auto mb-4">
-        <img src="{% static 'image/no-product.png' %}" alt="No product available" class="w-full h-full object-contain">
+        <img src="{% static 'image/no-product.png' %}" alt="No product available" class="w-full h-full object-contain opacity-70">
       </div>
-      <h3 class="text-lg font-medium text-gray-900 mb-2">No product found</h3>
-      <p class="text-gray-500 mb-6">Be the first to share football product with the community.</p>
-      <a href="{% url 'main:create_product' %}" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+      <h3 class="text-lg font-medium text-gray-100 mb-2">No product found</h3>
+      <p class="text-gray-400 mb-6">Be the first to share football product with the community.</p>
+      <a href="{% url 'main:create_product' %}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
         Create Product
       </a>
     </div>
@@ -118,34 +120,29 @@ function getReadableCategoryName(categoryCode) {
 
 // Create product card element
 function buildProductCardElement(productItem) {
-  const productElement = document.createElement('product');
- productElement.className = 'bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col h-full';
+  const productElement = document.createElement('div'); // ✅ bukan 'product'
+  productElement.className = 'bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col h-full';
 
   const detailLink = `{% url 'main:show_product' '00000000-0000-0000-0000-000000000000' %}`.replace('00000000-0000-0000-0000-000000000000', productItem.id);
   const editLink = `{% url 'main:edit_product' '00000000-0000-0000-0000-000000000000' %}`.replace('00000000-0000-0000-0000-000000000000', productItem.id);
   const deleteLink = `{% url 'main:delete_product' '00000000-0000-0000-0000-000000000000' %}`.replace('00000000-0000-0000-0000-000000000000', productItem.id);
 
+  const name = productItem.name || 'Unnamed Product';
+  const description = productItem.description || '';
+  const category = productItem.category || '';
+  const thumbnail = productItem.thumbnail || '';
+  const price = Number(productItem.price ?? 0);
 
-    const sanitize = (v) => (window.DOMPurify ? DOMPurify.sanitize(String(v ?? '')) : String(v ?? ''));
-    const name = sanitize(item.name ?? item.title);
-    const description = sanitize(item.description ?? item.content);
-    const category = sanitize(item.category);
-    const thumbnail = sanitize(item.thumbnail);
-
-    const price = Number(item.price ?? 0);
-
-    const formattedPrice = Number.isFinite(price) ? new Intl.NumberFormat('id-ID').format(price) : '0';
-
-  const categoryLabel = getReadableCategoryName(productItem.category);
+  const formattedPrice = new Intl.NumberFormat('id-ID').format(price);
+  const categoryLabel = getReadableCategoryName(category);
   const isFeatured = productItem.is_featured;
 
+  const thumbnailHtml = thumbnail
+    ? `<img src='${thumbnail}' alt='${name}' class='w-full h-full object-cover'>`
+    : `<div class='w-full h-full bg-gray-100 flex items-center justify-center text-gray-400'>No Image</div>`;
 
-  const thumbnailHtml = productItem.thumbnail 
-    ? `<img src='${productItem.thumbnail}' alt='${productItem.name}' class='w-full h-full object-cover'>` 
-    : `<div class='w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center'></div>`;
-
-  const featuredBadge = isFeatured 
-    ? `<span class='inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-yellow-100 text-yellow-800'>Featured</span>` 
+  const featuredBadge = isFeatured
+    ? `<span class='inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-yellow-100 text-yellow-800'>Featured</span>`
     : '';
 
   const editDeleteButtons = CURRENT_USER_ID && Number(CURRENT_USER_ID) === Number(productItem.user_id)
@@ -167,14 +164,12 @@ function buildProductCardElement(productItem) {
     </div>
     <div class="p-5 flex flex-col flex-1">
       <div class="flex items-center text-sm text-gray-500 mb-3">
-        <time>${formattedPrice}</time>
-        <span class="mx-2">•</span>
-        <span>${productItem.product_views} views</span>
+        <time>${formattedPrice} IDR</time>
       </div>
-      <h3 class="text-lg font-semibold text-gray-900 mb-3 line-clamp-2 leading-tight">
-        <a href="${detailLink}" class="hover:text-green-600 transition-colors">${productItem.title}</a>
+      <h3 class="text-lg font-semibold text-gray-900 mb-3 leading-tight">
+        <a href="${detailLink}" class="hover:text-green-600 transition-colors">${name}</a>
       </h3>
-      <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">${productItem.content}</p>
+      <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">${description}</p>
       <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
         <a href="${detailLink}" class="text-green-600 hover:text-green-700 font-medium text-sm transition-colors">Read more</a>
         ${editDeleteButtons}
