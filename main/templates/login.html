@@ -10,101 +10,150 @@
 >
   info
 </button>
-<div class="bg-gray-50 w-full min-h-screen flex items-center justify-center p-8">
-  <div class="max-w-md w-full">
-    <div class="bg-white rounded-lg border border-gray-200 p-6 sm:p-8 form-style">
-      <div class="text-center mb-8">
-        <h1 class="text-2xl font-bold text-gray-900 mb-2">Sign In</h1>
-        <p class="text-gray-600">Welcome back to Fisik Football</p>
-      </div>
-
-      <!-- Form Errors Display -->
-      {% if form.non_field_errors %}
-        <div class="mb-6">
-          {% for error in form.non_field_errors %}
-            <div class="px-4 py-3 rounded-md text-sm border bg-red-50 border-red-200 text-red-700">
-              {{ error }}
+<div class="bg-gray-900 min-h-screen flex items-center justify-center px-4">
+    <div class="max-w-md w-full">
+        <div class="bg-gray-800 rounded-lg border border-gray-700 p-8">
+            <h2 class="text-2xl font-bold text-gray-100 mb-6 text-center">Login</h2>
+            
+            <!-- Error Message -->
+            <div id="error-message" class="hidden mb-4 p-3 bg-red-900/50 border border-red-700 rounded-md">
+                <p class="text-red-200 text-sm"></p>
             </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-
-      {% if form.errors %}
-        <div class="mb-6">
-          {% for field, errors in form.errors.items %}
-            {% if field != '__all__' %}
-              {% for error in errors %}
-                <div class="px-4 py-3 rounded-md text-sm border bg-red-50 border-red-200 text-red-700 mb-2">
-                  <strong>{{ field|title }}:</strong> {{ error }}
+            
+            <!-- Success Message -->
+            <div id="success-message" class="hidden mb-4 p-3 bg-green-900/50 border border-green-700 rounded-md">
+                <p class="text-green-200 text-sm"></p>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="login-form">
+                {% csrf_token %}
+                
+                <div class="mb-4">
+                    <label for="username" class="block text-gray-300 text-sm font-medium mb-2">
+                        Username
+                    </label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        required
+                        class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:border-blue-500"
+                        placeholder="Enter your username"
+                    >
                 </div>
-              {% endfor %}
-            {% endif %}
-          {% endfor %}
+                
+                <div class="mb-6">
+                    <label for="password" class="block text-gray-300 text-sm font-medium mb-2">
+                        Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required
+                        class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:border-blue-500"
+                        placeholder="Enter your password"
+                    >
+                </div>
+                
+                <button 
+                    type="submit" 
+                    id="login-button"
+                    class="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed"
+                >
+                    Login
+                </button>
+            </form>
+            
+            <p class="text-gray-400 text-sm text-center mt-6">
+                Don't have an account? 
+                <a href="{% url 'main:register' %}" class="text-blue-500 hover:text-blue-400">Register here</a>
+            </p>
         </div>
-      {% endif %}
-
-      <form method="POST" action="" class="space-y-6">
-        {% csrf_token %}
-        
-        <div>
-          <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
-          <input 
-            id="username" 
-            name="username" 
-            type="text" 
-            required 
-            class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-green-500 transition-colors" 
-            placeholder="Enter your username">
-        </div>
-
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-          <input 
-            id="password" 
-            name="password" 
-            type="password" 
-            required 
-            class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-green-500 transition-colors" 
-            placeholder="Enter your password">
-        </div>
-
-        <button 
-          type="submit" 
-          class="w-full bg-green-600 text-white font-medium py-3 px-4 rounded-md hover:bg-green-700 transition-colors">
-          Sign In
-        </button>
-      </form>
-
-      <!-- Messages Display -->
-      {% if messages %}
-        <div class="mt-6">
-          {% for message in messages %}
-            <div 
-              class="
-                px-4 py-3 rounded-md text-sm border
-                {% if message.tags == 'success' %}
-                  bg-green-50 border-green-200 text-green-700
-                {% elif message.tags == 'error' %}
-                  bg-red-50 border-red-200 text-red-700
-                {% else %}
-                  bg-gray-50 border-gray-200 text-gray-700
-                {% endif %}
-              ">
-              {{ message }}
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-
-      <div class="mt-6 text-center pt-6 border-t border-gray-200">
-        <p class="text-gray-500 text-sm">
-          Don't have an account? 
-          <a href="{% url 'main:register' %}" class="text-green-600 hover:text-green-700 font-medium">
-            Register Now
-          </a>
-        </p>
-      </div>
     </div>
-  </div>
 </div>
+
+<script>
+// Configuration
+const LOGIN_ENDPOINT = "{% url 'main:login_ajax' %}";
+const MAIN_PAGE_URL = "{% url 'main:show_main' %}";
+
+// DOM Elements
+const loginForm = document.getElementById('login-form');
+const loginButton = document.getElementById('login-button');
+const errorMessage = document.getElementById('error-message');
+const successMessage = document.getElementById('success-message');
+
+// Show error message
+function showError(message) {
+    errorMessage.classList.remove('hidden');
+    successMessage.classList.add('hidden');
+    errorMessage.querySelector('p').textContent = message;
+}
+
+// Show success message
+function showSuccess(message) {
+    successMessage.classList.remove('hidden');
+    errorMessage.classList.add('hidden');
+    successMessage.querySelector('p').textContent = message;
+}
+
+// Hide all messages
+function hideMessages() {
+    errorMessage.classList.add('hidden');
+    successMessage.classList.add('hidden');
+}
+
+// Handle login form submission
+loginForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Disable button and show loading
+    loginButton.disabled = true;
+    loginButton.textContent = 'Logging in...';
+    hideMessages();
+    
+    // Get form data
+    const formData = new FormData(loginForm);
+    
+    try {
+        const response = await fetch(LOGIN_ENDPOINT, {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (response.status === 200) {
+            // Login berhasil (LOGGED_IN)
+            showSuccess('Login berhasil! Mengalihkan...');
+            
+            // Redirect setelah 1 detik
+            setTimeout(() => {
+                window.location.href = MAIN_PAGE_URL;
+            }, 1000);
+        } else if (response.status === 401) {
+            // Login gagal (INVALID_CREDENTIALS)
+            showError('Username atau password salah');
+            loginButton.disabled = false;
+            loginButton.textContent = 'Login';
+        } else if (response.status === 429) {
+            // Terlalu banyak percobaan (TOO_MANY_ATTEMPTS)
+            showError('Terlalu banyak percobaan login. Coba lagi dalam 15 menit.');
+            loginButton.disabled = false;
+            loginButton.textContent = 'Login';
+        } else {
+            // Error lainnya
+            showError('Terjadi kesalahan. Silakan coba lagi.');
+            loginButton.disabled = false;
+            loginButton.textContent = 'Login';
+        }
+        
+    } catch (error) {
+        console.error('Login error:', error);
+        showError('Terjadi kesalahan. Silakan coba lagi.');
+        loginButton.disabled = false;
+        loginButton.textContent = 'Login';
+    }
+});
+</script>
 {% endblock content %}

@@ -187,3 +187,47 @@ def add_product_entry_ajax(request):
     )
     new_product.save()
     return HttpResponse(b"CREATED", status=201)
+
+@csrf_exempt
+@require_POST
+def login_ajax(request):
+    username = strip_tags(request.POST.get("username"))
+    password = request.POST.get("password")
+    
+    # Rate limiting untuk prevent brute force
+    ip = request.META.get('REMOTE_ADDR')
+    cache_key = f'login_attempts_{ip}'
+    attempts = cache.get(cache_key, 0)
+    
+    if attempts >= 5:
+        return HttpResponse(b"TOO_MANY_ATTEMPTS", status=429)
+    
+    # Authenticate user
+    user = authenticate(request, username=username, password=password)
+    
+    if user is not None:
+        # Login berhasil
+        login(request, user)
+        
+        # Reset counter login attempts
+        cache.delete(cache_key)
+        
+        # Set last_login cookie
+        response = HttpResponse(b"LOGGED_IN", status=200)
+        response.set_cookie('last_login', str(datetime.datetime.now()))
+        
+        return response
+    else:
+        # Login gagal - tambah counter
+        cache.set(cache_key, attempts + 1, 900)  # 15 menit
+        return HttpResponse(b"INVALID_CREDENTIALS", status=401)
+
+@csrf_exempt
+@require_POST
+def logout_ajax(request):
+    logout(request)
+    
+    response = HttpResponse(b"LOGGED_OUT", status=200)
+    response.delete_cookie('last_login')
+    
+    return response
