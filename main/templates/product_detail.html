@@ -16,8 +16,8 @@
             </a>
         </div>
         
-        <!-- Article -->
-        <article class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <!-- product -->
+        <product class="bg-white rounded-lg border border-gray-200 overflow-hidden">
             
             <!-- Header -->
             <div class="p-6 sm:p-8">
@@ -38,7 +38,7 @@
                 </div>
                 
                 <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-4">
-                    {{ product.title }}
+                    {{ product.name }}
                 </h1>
                 
                 <div class="flex flex-wrap items-center text-sm text-gray-500 gap-4">
@@ -53,7 +53,7 @@
             {% if product.thumbnail %}
                 <div class="px-6 sm:px-8">
                     <img src="{{ product.thumbnail }}" 
-                         alt="{{ product.title }}" 
+                         alt="{{ product.name }}" 
                          class="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-lg">
                 </div>
             {% endif %}
@@ -82,33 +82,33 @@
                     </div>
                 </div>
             </div>
-        </article>
+        </product>
     </div>
 </div>
 
 <script>
 // Configuration
-const NEWS_ID = "{{ news.id }}";
-const NEWS_DETAIL_ENDPOINT = `{% url 'main:show_json_by_id' '00000000-0000-0000-0000-000000000000' %}`.replace('00000000-0000-0000-0000-000000000000', NEWS_ID);
+const PRODUCT_ID = "{{ product.id }}";
+const PRODUCT_DETAIL_ENDPOINT = `{% url 'main:show_json_by_id' '00000000-0000-0000-0000-000000000000' %}`.replace('00000000-0000-0000-0000-000000000000', PRODUCT_ID);
 
 // DOM Elements
 const loadingState = document.getElementById('loading-state');
 const errorState = document.getElementById('error-state');
-const articleContent = document.getElementById('article-content');
+const productContent = document.getElementById('product-content');
 const badgesContainer = document.getElementById('badges-container');
-const articleTitle = document.getElementById('article-title');
-const articleDate = document.getElementById('article-date');
-const articleViews = document.getElementById('article-views');
+const productName= document.getElementById('product-name');
+const productDate = document.getElementById('product-date');
+const productViews = document.getElementById('product-views');
 const featuredImageContainer = document.getElementById('featured-image-container');
 const featuredImage = document.getElementById('featured-image');
-const articleContentText = document.getElementById('article-content-text');
-const articleAuthor = document.getElementById('article-author');
+const productContentText = document.getElementById('product-content-text');
+const productAuthor = document.getElementById('product-author');
 
 // Show/hide page sections
 function showState(state) {
     loadingState.classList.toggle('hidden', state !== 'loading');
     errorState.classList.toggle('hidden', state !== 'error');
-    articleContent.classList.toggle('hidden', state !== 'ready');
+    productContent.classList.toggle('hidden', state !== 'ready');
 }
 
 // Get readable category name
@@ -124,11 +124,11 @@ function getCategoryLabel(categoryCode) {
     return categoryMapping[categoryCode] || categoryCode;
 }
 
-// Render article content
-function renderArticle(news) {
-    // Set title
-    articleTitle.textContent = news.title;
-    document.title = `${news.title} - Football News`;
+// Render product Description
+function renderProduct(product) {
+    // Set name
+    productName.textDescription = product.name;
+    document.name = `${product.name} - Fisik Football`;
     
     // Set badges
     badgesContainer.innerHTML = '';
@@ -136,76 +136,69 @@ function renderArticle(news) {
     // Category badge
     const categoryBadge = document.createElement('span');
     categoryBadge.className = 'inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-green-600 text-white';
-    categoryBadge.textContent = getCategoryLabel(news.category);
+    categoryBadge.textDescription = getCategoryLabel(product.category);
     badgesContainer.appendChild(categoryBadge);
     
     // Featured badge
-    if (news.is_featured) {
+    if (product.is_featured) {
         const featuredBadge = document.createElement('span');
         featuredBadge.className = 'inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-yellow-100 text-yellow-800';
-        featuredBadge.textContent = 'Featured';
+        featuredBadge.textDescription = 'Featured';
         badgesContainer.appendChild(featuredBadge);
     }
-    
-    // Hot badge
-    if (news.news_views > 20) {
-        const hotBadge = document.createElement('span');
-        hotBadge.className = 'inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-red-100 text-red-800';
-        hotBadge.textContent = 'Hot';
-        badgesContainer.appendChild(hotBadge);
-    }
+
     
     // Set date and views
-    const formattedDate = new Date(news.created_at).toLocaleDateString('en-US', { 
+    const formattedDate = new Date(product.created_at).toLocaleDateString('en-US', { 
         year: 'numeric', 
         month: 'long', 
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit'
     });
-    articleDate.textContent = formattedDate;
-    articleViews.textContent = `${news.news_views} views`;
+    productDate.textDescription = formattedDate;
+    productViews.textDescription = `${product.product_views} views`;
     
     // Set featured image
-    if (news.thumbnail) {
-        featuredImage.src = news.thumbnail;
-        featuredImage.alt = news.title;
+    if (product.thumbnail) {
+        featuredImage.src = product.thumbnail;
+        featuredImage.alt = product.name;
         featuredImageContainer.classList.remove('hidden');
     } else {
         featuredImageContainer.classList.add('hidden');
     }
     
-    // Set content
-    articleContentText.textContent = news.content;
+    // Set Description
+    productDescriptionText.textDescription = product.description;
     
     // Set author
-    const authorName = news.user_username || 'Anonymous';
-    articleAuthor.textContent = `Author: ${authorName}`;
+    const authorName = product.user_username || 'Anonymous';
+    productAuthor.textContent = `Author: ${authorName}`;
 }
 
-// Fetch news detail
-async function loadNewsDetail() {
+// Fetch product detail
+async function loadProductDetail() {
     try {
         showState('loading');
         
-        const response = await fetch(NEWS_DETAIL_ENDPOINT, {
+        const response = await fetch(PRODUCT_DETAIL_ENDPOINT, {
             headers: { 'Accept': 'application/json' },
         });
 
         if (!response.ok) {
-            throw new Error('Failed to fetch news detail');
+            throw new Error('Failed to fetch product detail');
         }
 
-        const newsData = await response.json();
-        renderArticle(newsData);
+        const productData = await response.json();
+        renderProduct(productData);
         showState('ready');
     } catch (error) {
-        console.error('Error loading news detail:', error);
+        console.error('Error loading product detail:', error);
         showState('error');
     }
 }
 
 // Initialize page
-loadNewsDetail();
+loadProductDetail();
 </script>
 {% endblock content %}
