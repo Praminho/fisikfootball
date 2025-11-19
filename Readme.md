@@ -834,7 +834,7 @@ Grid = solusi lebih terstruktur untuk tata letak halaman penuh.
   </div>
 </div>
 {% endblock content %}
-
+```
 ## Tugas 6:
 1. Apa perbedaan antara synchronous request dan asynchronous request?
     - synchronous melakukan form submit dengan step berupa:
