@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.shortcuts import get_object_or_404, redirect
 from main.models import Product
@@ -14,6 +14,11 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.utils.html import strip_tags
+import requests
+import json
+from main.models import Product
+
 
 
 
@@ -194,13 +199,13 @@ def login_ajax(request):
     username = strip_tags(request.POST.get("username"))
     password = request.POST.get("password")
     
-    # Rate limiting untuk prevent brute force
-    ip = request.META.get('REMOTE_ADDR')
-    cache_key = f'login_attempts_{ip}'
-    attempts = cache.get(cache_key, 0)
+    # # Rate limiting untuk prevent
+    # ip = request.META.get('REMOTE_ADDR')
+    # cache_key = f'login_attempts_{ip}'
+    # attempts = cache.get(cache_key, 0)
     
-    if attempts >= 5:
-        return HttpResponse(b"TOO_MANY_ATTEMPTS", status=429)
+    # if attempts >= 5:
+    #     return HttpResponse(b"TOO_MANY_ATTEMPTS", status=429)
     
     # Authenticate user
     user = authenticate(request, username=username, password=password)
@@ -209,8 +214,8 @@ def login_ajax(request):
         # Login berhasil
         login(request, user)
         
-        # Reset counter login attempts
-        cache.delete(cache_key)
+        # # Reset counter login attempts
+        # cache.delete(cache_key)
         
         # Set last_login cookie
         response = HttpResponse(b"LOGGED_IN", status=200)
@@ -231,3 +236,73 @@ def logout_ajax(request):
     response.delete_cookie('last_login')
     
     return response
+
+def proxy_image(request):
+    image_url = request.GET.get('url')
+    if not image_url:
+        return HttpResponse('No URL provided', status=400)
+    
+    try:
+        # Fetch image from external source
+        response = requests.get(image_url, timeout=10)
+        response.raise_for_status()
+        
+        # Return the image with proper content type
+        return HttpResponse(
+            response.content,
+            content_type=response.headers.get('Content-Type', 'image/jpeg')
+        )
+    except requests.RequestException as e:
+        return HttpResponse(f'Error fetching image: {str(e)}', status=500)
+
+@csrf_exempt
+def create_product_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        name = strip_tags(data.get("name", ""))
+        price = data.get("price", 0)
+        description = strip_tags(data.get("description", ""))
+        category = data.get("category", "")
+        thumbnail = data.get("thumbnail", "")
+        is_featured = data.get("is_featured", False)
+        user = request.user
+
+        new_product = Product(
+            name=name,
+            price=price,
+            description=description,
+            category=category,
+            thumbnail=thumbnail,
+            is_featured=is_featured,
+            user=user
+        )
+
+        new_product.save()
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+
+from django.http import JsonResponse
+from main.models import Product
+
+@login_required(login_url='/login')
+def show_json(request):
+    user_only = request.GET.get("user_only", "false") == "true"
+    if user_only:
+        productlist = Product.objects.filter(user=request.user)
+    else:
+        productlist = Product.objects.all()
+    data = [
+        {
+            "id": str(product.id),
+            "name": product.name,
+            "description": product.description,
+            "category": product.category,
+            "thumbnail": product.thumbnail,
+            "price": product.price,
+            "is_featured": product.is_featured,
+            "user_id": product.user.id if product.user else None,
+        }
+        for product in productlist
+    ]
+    return JsonResponse(data, safe=False)
